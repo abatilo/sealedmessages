@@ -1,0 +1,24 @@
+name: "Continuous Integration"
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+
+jobs:
+  setup:
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - "black"
+          - "pytest"
+    name: "Install CI dependencies"
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Install docker buildx"
+        uses: docker/setup-buildx-action@v1
+      - name: "Execute CI check"
+        run: |
+          docker build --tag ci --file operations/Dockerfile.backend --target build backend
+          docker run --rm --interactive --tty ci ${{ matrix.command }}

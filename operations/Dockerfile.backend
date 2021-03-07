@@ -1,0 +1,31 @@
+# Install dev dependencies and run various CI checks
+FROM python:3.9 as build
+ENV PATH="/app/.venv/bin:$PATH"
+
+WORKDIR /app
+
+# Should match whatever is in .tool-versions.  Pass this in as a --build-arg in
+# the future and source the value from the .tool-versions
+RUN pip install poetry==1.1.5
+COPY poetry.lock pyproject.toml ./
+RUN poetry config virtualenvs.in-project true
+
+# Skip installing this package. Only install dependencies
+RUN poetry install --no-root
+
+# Copy application code in AFTER dependencies, so that the dependencies are
+# isolated and cached as its own Docker layer
+COPY ./backend ./backend
+COPY ./tests ./tests
+COPY manage.py ./
+
+# Install no-dev dependencies
+FROM build as installer
+RUN poetry install --no-root --no-dev
+
+# Copy over just the .venv and nothing else
+# FROM installer
+# WORKDIR /app
+# ENV PATH="/app/.venv:$PATH"
+# COPY --from=installer /app/.venv ./
+# COPY . .
