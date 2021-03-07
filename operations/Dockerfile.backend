@@ -15,9 +15,9 @@ RUN poetry install --no-root
 
 # Copy application code in AFTER dependencies, so that the dependencies are
 # isolated and cached as its own Docker layer
+COPY manage.py ./
 COPY ./backend ./backend
 COPY ./tests ./tests
-COPY manage.py ./
 
 # Install no-dev dependencies
 FROM build as installer
