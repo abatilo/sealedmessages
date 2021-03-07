@@ -13,11 +13,15 @@ jobs:
         command:
           - "black"
           - "pytest"
-    name: "Install CI dependencies"
+    name: "Run CI status checks"
     runs-on: ubuntu-20.04
     steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v2
+
       - name: "Install docker buildx"
         uses: docker/setup-buildx-action@v1
+
       - name: "Execute CI check"
         run: |
           docker build --tag ci --file operations/Dockerfile.backend --target build backend
