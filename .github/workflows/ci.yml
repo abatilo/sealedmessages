@@ -11,9 +11,10 @@ jobs:
       fail-fast: false
       matrix:
         command:
-          - "black"
+          - "black --check backend"
+          - "black --check tests"
           - "pytest"
-    name: "Run CI status checks"
+    name: "Run checks"
     runs-on: ubuntu-20.04
     steps:
       - name: "Clone repository"
@@ -22,7 +23,7 @@ jobs:
       - name: "Install docker buildx"
         uses: docker/setup-buildx-action@v1
 
-      - name: "Execute CI check"
+      - name: "Execute check"
         run: |
           docker build --tag ci --file operations/Dockerfile.backend --target build backend
           docker run --rm ci ${{ matrix.command }}
