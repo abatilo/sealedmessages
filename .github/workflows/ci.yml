@@ -25,4 +25,4 @@ jobs:
       - name: "Execute CI check"
         run: |
           docker build --tag ci --file operations/Dockerfile.backend --target build backend
-          docker run --rm --interactive --tty ci ${{ matrix.command }}
+          docker run --rm ci ${{ matrix.command }}
