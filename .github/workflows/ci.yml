@@ -34,10 +34,10 @@ jobs:
 
       - name: "Execute check"
         run: |
-          docker buildx build \
+          docker build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --tag ci \
+            --tag ci:${{ github.sha }} \
             --file operations/Dockerfile.backend \
             --target build \
             backend
