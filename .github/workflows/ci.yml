@@ -23,7 +23,23 @@ jobs:
       - name: "Install docker buildx"
         uses: docker/setup-buildx-action@v1
 
+      - name: "Restore docker cache"
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: "Execute check"
         run: |
-          docker build --tag ci --file operations/Dockerfile.backend --target build backend
+          docker buildx build \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --cache-to "type=local,dest=/tmp/.buildx-cache" \
+            --tag ci \
+            --file operations/Dockerfile.backend \
+            --target build \
+            backend
+
           docker run --rm ci ${{ matrix.command }}
