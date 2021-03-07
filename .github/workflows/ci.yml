@@ -34,7 +34,7 @@ jobs:
 
       - name: "Execute check"
         run: |
-          docker build \
+          docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --cache-to "type=local,dest=/tmp/.buildx-cache" \
             --load \
