@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "local_secret_key")
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 
 # Allow for the pod to hit its own health checks
@@ -79,7 +79,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "postgres",
         "USER": "postgres",
-        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "local_password"),
         "HOST": os.getenv("DB_HOST", "localhost"),  # Name of k8s svc for statefulset
         "PORT": 5432,
     }

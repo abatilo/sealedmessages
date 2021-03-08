@@ -19,12 +19,15 @@ docker_build(
   ref="backend",
   context="./backend",
   dockerfile="./operations/Dockerfile.backend",
-  entrypoint="python manage.py migrate && python manage.py runserver 0:8000",
-  target="build",
   live_update=[
     fall_back_on('./backend/pyproject.toml'),
     sync('./backend/', '/app/'),
   ],
+
+  # Override Dockerfile so that we stay on the build layer with dev
+  # dependencies and hot reloading
+  target="build",
+  entrypoint="python manage.py migrate --no-input && python manage.py runserver 0:8000",
 )
 
 yaml = helm(

@@ -26,6 +26,10 @@ spec:
             :{{ .Values.image.tag }}
           {{- end }}"
           imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "10"]
           env:
           {{- range $k, $v := .Values.env }}
           {{- if or (kindIs "string" $v) (kindIs "bool" $v) }}
