@@ -19,7 +19,7 @@ docker_build(
   ref="backend",
   context="./backend",
   dockerfile="./operations/Dockerfile.backend",
-  entrypoint="python manage.py migrate && python manage.py runserver",
+  entrypoint="python manage.py migrate && python manage.py runserver 0:8000",
   target="build",
   live_update=[
     fall_back_on('./backend/pyproject.toml'),

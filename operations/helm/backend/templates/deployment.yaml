@@ -42,8 +42,22 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 1
+              memory: 1Gi
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 1
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 5
+            failureThreshold: 2
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 2

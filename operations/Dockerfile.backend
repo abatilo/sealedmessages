@@ -17,6 +17,7 @@ RUN poetry install --no-root
 # isolated and cached as its own Docker layer
 COPY manage.py ./
 COPY ./backend ./backend
+COPY ./core ./core
 COPY ./tests ./tests
 
 # Install no-dev dependencies
@@ -29,5 +30,6 @@ WORKDIR /app
 ENV PATH="/app/.venv:$PATH"
 COPY manage.py ./
 COPY ./backend ./backend
+COPY ./core ./core
 COPY --from=installer /app/.venv ./.venv
 ENTRYPOINT ["gunicorn", "backend.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0"]
