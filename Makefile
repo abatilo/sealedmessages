@@ -27,6 +27,7 @@ tmp/k8s-cluster: tmp/asdf-installs ## Create a Kubernetes cluster for local deve
 
 .PHONY: bootstrap
 bootstrap: tmp/asdf-installs tmp/k8s-cluster ## Perform all bootstrapping to start your project
+	helm repo update # Make sure that tilt can pull the latest helm chart versions
 
 .PHONY: clean
 clean: ## Delete local dev environment
@@ -37,3 +38,7 @@ clean: ## Delete local dev environment
 up: bootstrap ## Run a local development environment
 	tilt up --context kind-$(PROJECT_NAME) --hud
 	tilt down --context kind-$(PROJECT_NAME)
+
+.PHONY: psql
+psql: ## Opens a psql shell to the local postgres instance
+	kubectl --context kind-$(PROJECT_NAME) exec -it postgresql-postgresql-0 -- bash -c "PGPASSWORD=local_password psql -U postgres"
