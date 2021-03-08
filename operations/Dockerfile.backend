@@ -24,8 +24,10 @@ FROM build as installer
 RUN poetry install --no-root --no-dev
 
 # Copy over just the .venv and nothing else
-# FROM installer
-# WORKDIR /app
-# ENV PATH="/app/.venv:$PATH"
-# COPY --from=installer /app/.venv ./
-# COPY . .
+FROM installer
+WORKDIR /app
+ENV PATH="/app/.venv:$PATH"
+COPY manage.py ./
+COPY ./backend ./backend
+COPY --from=installer /app/.venv ./.venv
+ENTRYPOINT ["gunicorn", "backend.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0"]
