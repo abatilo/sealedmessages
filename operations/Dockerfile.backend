@@ -32,7 +32,7 @@ RUN poetry install --no-root --no-dev
 # Copy over just the .venv and nothing else
 FROM python:3.9-slim
 WORKDIR /app
-ENV PATH="/app/.venv:$PATH"
+ENV PATH="/app/.venv/bin:$PATH"
 COPY manage.py ./
 COPY ./backend ./backend
 COPY ./core ./core
