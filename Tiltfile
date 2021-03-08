@@ -23,7 +23,7 @@ docker_build(
   target="build",
   live_update=[
     fall_back_on('./backend/pyproject.toml'),
-    sync('./backend/backend', '/app/backend'),
+    sync('./backend/', '/app/'),
   ],
 )
 
@@ -32,7 +32,11 @@ yaml = helm(
   name="backend",
   set=[
     "image.repository=backend",
+    "dbHost=postgresql",
+    "dbPassword=local_password",
   ]
 )
 k8s_yaml(yaml)
+
 k8s_resource("backend", port_forwards=["8000"])
+k8s_resource("postgresql-postgresql", port_forwards=["5432"])
