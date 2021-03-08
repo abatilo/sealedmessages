@@ -32,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: "Execute check"
+      - name: "Build CI container"
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
@@ -43,4 +43,6 @@ jobs:
             --target build \
             backend
 
+      - name: "Execute check"
+        run: |
           docker run --rm ci ${{ matrix.command }}
