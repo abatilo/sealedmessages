@@ -3,3 +3,21 @@ replicaCount: 1
 image:
   repository: backend
   tag: ""
+
+initContainers:
+  - name: check-db-ready
+    # Should match the helm chart used in local development
+    image: docker.io/bitnami/postgresql:11.11.0-debian-10-r24
+    command: [
+        "sh",
+        "-c",
+        "until pg_isready --dbname=postgres --host=postgresql --port=5432 --username=postgres;
+        do echo waiting for database; sleep 2; done;",
+      ]
+
+env:
+  DB_HOST: postgresql
+  DB_PASSWORD: local_password
+  DJANGO_SECRET_KEY: local_secret_key
+  DJANGO_DEBUG: true
+  DJANGO_ALLOWED_HOSTS: []

@@ -30,11 +30,7 @@ docker_build(
 yaml = helm(
   "./operations/helm/backend/",
   name="backend",
-  set=[
-    "image.repository=backend",
-    "dbHost=postgresql",
-    "dbPassword=local_password",
-  ]
+  values=["./operations/helm/backend/values.yaml"],
 )
 k8s_yaml(yaml)
 

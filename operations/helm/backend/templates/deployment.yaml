@@ -15,6 +15,10 @@ spec:
         {{- include "backend.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: "default"
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}
@@ -23,10 +27,15 @@ spec:
           {{- end }}"
           imagePullPolicy: Always
           env:
-            - name: "DB_HOST"
-              value: {{ .Values.dbHost }}
-            - name: "DB_PASSWORD"
-              value: {{ .Values.dbPassword }}
+          {{- range $k, $v := .Values.env }}
+          {{- if or (kindIs "string" $v) (kindIs "bool" $v) }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+          {{- else if kindIs "slice" $v }}
+            - name: {{ $k }}
+              value: {{ join "\n" $v | quote }}
+          {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8000
