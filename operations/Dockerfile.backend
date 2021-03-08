@@ -1,8 +1,13 @@
 # Install dev dependencies and run various CI checks
-FROM python:3.9 as build
+FROM python:3.9-slim as build
 ENV PATH="/app/.venv/bin:$PATH"
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+      gcc=4:8.3.0-1 build-essential=12.6 \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 # Should match whatever is in .tool-versions.  Pass this in as a --build-arg in
 # the future and source the value from the .tool-versions
@@ -25,7 +30,7 @@ FROM build as installer
 RUN poetry install --no-root --no-dev
 
 # Copy over just the .venv and nothing else
-FROM installer
+FROM python:3.9-slim
 WORKDIR /app
 ENV PATH="/app/.venv:$PATH"
 COPY manage.py ./
