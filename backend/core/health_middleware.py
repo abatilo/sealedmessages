@@ -6,7 +6,7 @@ import logging
 
 from django.http import HttpResponse, HttpResponseServerError
 
-logger = logging.getLogger("healthz")
+logger = logging.getLogger(__name__)
 
 
 class HealthCheckMiddleware(object):
@@ -33,10 +33,8 @@ class HealthCheckMiddleware(object):
         # that doesn't write any data and doesn't depend on any tables
         # being present.
         try:
-            logger.info("Trying checks")
             from django.db import connections
 
-            logger.info(connections)
             for name in connections:
                 cursor = connections[name].cursor()
                 cursor.execute("SELECT 1;")

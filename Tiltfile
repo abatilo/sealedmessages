@@ -27,7 +27,7 @@ docker_build(
   # Override Dockerfile so that we stay on the build layer with dev
   # dependencies and hot reloading
   target="build",
-  entrypoint="python manage.py migrate --no-input && python manage.py runserver 0:8000",
+  entrypoint="python manage.py runserver 0:8000",
 )
 
 yaml = helm(

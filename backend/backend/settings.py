@@ -70,6 +70,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "json": {
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "%(asctime)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

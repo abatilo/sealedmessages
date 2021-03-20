@@ -220,6 +220,14 @@ checkqa-mypy = ["mypy (==v0.761)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
+name = "python-json-logger"
+version = "2.0.1"
+description = "A python library adding a json log formatter"
+category = "main"
+optional = false
+python-versions = ">=3.4"
+
+[[package]]
 name = "pytz"
 version = "2021.1"
 description = "World timezone definitions, modern and historical"
@@ -306,7 +314,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "7cafe73d957a0a7a85e0df208771a3b588f2070e0303ae848a2a586c1dee9e94"
+content-hash = "789bf13948c2a4a0821cc00ecea5c1ef246125afc88b1a525e258deb90fe80bb"
 
 [metadata.files]
 appdirs = [
@@ -430,6 +438,9 @@ pyparsing = [
 pytest = [
     {file = "pytest-5.4.3-py3-none-any.whl", hash = "sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1"},
     {file = "pytest-5.4.3.tar.gz", hash = "sha256:7979331bfcba207414f5e1263b5a0f8f521d0f457318836a7355531ed1a4c7d8"},
+]
+python-json-logger = [
+    {file = "python-json-logger-2.0.1.tar.gz", hash = "sha256:f26eea7898db40609563bed0a7ca11af12e2a79858632706d835a0f961b7d398"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
