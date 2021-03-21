@@ -8,21 +8,28 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('revealed_date', models.DateTimeField(db_index=True)),
-                ('title', models.CharField(default='', max_length=100)),
-                ('content', models.TextField()),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("revealed_date", models.DateTimeField(db_index=True)),
+                ("title", models.CharField(default="", max_length=100)),
+                ("content", models.TextField()),
             ],
             options={
-                'ordering': ['-created_date'],
+                "ordering": ["-created_date"],
             },
         ),
     ]
