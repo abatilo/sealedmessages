@@ -24,7 +24,6 @@ COPY manage.py ./
 COPY ./backend ./backend
 COPY ./core ./core
 COPY ./messages ./messages
-COPY ./tests ./tests
 
 # Install no-dev dependencies
 FROM build as installer
