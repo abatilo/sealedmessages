@@ -13,6 +13,7 @@ uvloop = "^0.15.2"
 httptools = "^0.1.1"
 psycopg2-binary = "^2.8.6"
 python-json-logger = "^2.0.1"
+djangorestframework = "^3.12.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

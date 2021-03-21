@@ -31,12 +31,14 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").splitlines()
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
+    "messages.apps.MessagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
