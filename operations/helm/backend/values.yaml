@@ -21,3 +21,6 @@ env:
   DJANGO_SECRET_KEY: local_secret_key
   DJANGO_DEBUG: true
   DJANGO_ALLOWED_HOSTS: []
+
+entryPoints:
+  - web

@@ -3,3 +3,6 @@ replicaCount: 1
 image:
   repository: frontend
   tag: ""
+
+entryPoints:
+  - web

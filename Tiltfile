@@ -2,8 +2,6 @@ allow_k8s_contexts("kind-sealedmessages")
 
 # Allow for installing other helm charts
 load('ext://helm_remote', 'helm_remote')
-# Restart process
-load('ext://restart_process', 'docker_build_with_restart')
 
 helm_remote("postgresql",
   repo_name="bitnami",
@@ -17,8 +15,17 @@ helm_remote("postgresql",
   ]
 )
 
+helm_remote("traefik",
+  repo_name="traefik",
+            repo_url="https://helm.traefik.io/traefik",
+  version="9.12.3",
+  set=[
+    "service.type=ClusterIP"
+  ]
+)
+
 # When running locally through Tilt, we want to run in dev mode
-docker_build_with_restart(
+docker_build(
   ref="backend",
   context="./backend",
   dockerfile="./operations/Dockerfile.backend",
@@ -30,7 +37,7 @@ docker_build_with_restart(
   # Override Dockerfile so that we stay on the build layer with dev
   # dependencies and hot reloading
   target="build",
-  entrypoint="python manage.py runserver --noreload 0.0.0.0:8000",
+  entrypoint="python manage.py runserver 0.0.0.0:8000",
 )
 
 # When running locally through Tilt, we want to run in dev mode
@@ -64,5 +71,4 @@ frontend_yaml = helm(
 k8s_yaml(frontend_yaml)
 
 k8s_resource("postgresql-postgresql", port_forwards=["5432"])
-k8s_resource("backend", port_forwards=["8000"])
-k8s_resource("frontend", port_forwards=["3000"])
+k8s_resource("traefik", port_forwards=["8000", "9000"])

@@ -2,7 +2,7 @@ const App = () => {
   return (
     <div>
       <header>
-        <p className="bg-gray-200">Empty project?</p>
+        <p className="bg-gray-200">Empty project!!!</p>
       </header>
     </div>
   );
