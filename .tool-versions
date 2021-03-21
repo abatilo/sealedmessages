@@ -4,3 +4,5 @@ kubectl 1.20.4
 poetry 1.1.5
 python 3.9.2
 tilt 0.19.0
+yarn 1.22.10
+nodejs 14.16.0

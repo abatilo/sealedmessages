@@ -1,4 +1,5 @@
 .helm
+node_modules
 operations
 tilt_modules
 tmp
