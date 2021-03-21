@@ -1,6 +1,9 @@
 allow_k8s_contexts("kind-sealedmessages")
+
 # Allow for installing other helm charts
 load('ext://helm_remote', 'helm_remote')
+# Restart process
+load('ext://restart_process', 'docker_build_with_restart')
 
 helm_remote("postgresql",
   repo_name="bitnami",
@@ -15,7 +18,7 @@ helm_remote("postgresql",
 )
 
 # When running locally through Tilt, we want to run in dev mode
-docker_build(
+docker_build_with_restart(
   ref="backend",
   context="./backend",
   dockerfile="./operations/Dockerfile.backend",
@@ -27,7 +30,7 @@ docker_build(
   # Override Dockerfile so that we stay on the build layer with dev
   # dependencies and hot reloading
   target="build",
-  entrypoint="python manage.py runserver 0:8000",
+  entrypoint="python manage.py runserver --noreload 0.0.0.0:8000",
 )
 
 yaml = helm(

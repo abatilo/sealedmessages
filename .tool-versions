@@ -3,4 +3,4 @@ kind 0.10.0
 kubectl 1.20.4
 poetry 1.1.5
 python 3.9.2
-tilt 0.18.11
+tilt 0.19.0

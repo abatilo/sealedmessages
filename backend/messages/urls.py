@@ -1,10 +1,8 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
-urlpatterns = [
-    path("messages/", views.MessageList.as_view()),
-    path("messages/<int:pk>/", views.MessageDetail.as_view()),
-]
+router = DefaultRouter(trailing_slash=False)
+router.register(r"messages", views.MessageViewSet)
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns = [path("api/v1/", include(router.urls))]
