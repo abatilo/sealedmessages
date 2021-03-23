@@ -60,10 +60,19 @@ jobs:
             --file operations/Dockerfile.backend \
             --target build \
             backend
+            
+      - name: "Write secrets to disk"
+        env:
+          FILE_TO_MOUNT: ${{ secrets.FILE_TO_MOUNT }}
+        run: |
+          echo "${FILE_TO_MOUNT}" > ${HOME}/foo.txt
+          cat ${HOME}/foo.txt
 
       - name: "Execute check"
         env:
           DB_HOST: "localhost"
           DB_PASSWORD: "local_password"
         run: |
+          docker run --mount "type=bind,src=${HOME}/foo.txt,dst=/root/foo.txt" \
+            --rm ubuntu:20.04 cat /root/foo.txt
           docker run --network host -e DB_HOST -e DB_PASSWORD --rm ci ${{ matrix.command }}
