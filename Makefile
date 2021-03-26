@@ -18,6 +18,8 @@ tmp/asdf-installs: .tool-versions ## Install all tools through asdf-vm
 	@-asdf plugin-add poetry  || asdf install poetry
 	@-asdf plugin-add python  || asdf install python
 	@-asdf plugin-add tilt    || asdf install tilt
+	@-asdf plugin-add yarn    || asdf install yarn
+	@-asdf plugin-add nodejs  || asdf install nodejs
 	@-touch $@
 
 tmp/k8s-cluster: tmp/asdf-installs ## Create a Kubernetes cluster for local development
