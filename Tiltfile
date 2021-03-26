@@ -15,6 +15,20 @@ helm_remote("postgresql",
   ]
 )
 
+# helm_remote("redis",
+#   repo_name="bitnami",
+#   repo_url="https://charts.bitnami.com/bitnami",
+#   # This chart version pulls in app version 11.11.0
+#   version="6.0.12",
+# )
+
+# helm_remote("rabbitmq",
+#   repo_name="bitnami",
+#   repo_url="https://charts.bitnami.com/bitnami",
+#   # This chart version pulls in app version 11.11.0
+#   version="3.8.14",
+# )
+
 helm_remote("traefik",
   repo_name="traefik",
             repo_url="https://helm.traefik.io/traefik",
