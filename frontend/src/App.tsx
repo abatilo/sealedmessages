@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useSWR from "swr";
 
 const listMessages = async (url: string) => {
@@ -6,9 +7,14 @@ const listMessages = async (url: string) => {
 };
 
 const App = () => {
-  const { data, error } = useSWR("/api/v1/messages", listMessages, {
-    refreshInterval: 1000,
-  });
+  const [pageIndex, setPageIndex] = useState(1);
+  const { data, error } = useSWR(
+    `/api/v1/messages?page=${pageIndex}`,
+    listMessages,
+    {
+      refreshInterval: 1000,
+    }
+  );
 
   if (error) {
     return <div>Bad</div>;
@@ -145,6 +151,34 @@ const App = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="p-8">
+            {data?.previous ? (
+              <button
+                onClick={() => setPageIndex(pageIndex - 1)}
+                type="button"
+                className="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-white bg-blue-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Previous
+              </button>
+            ) : (
+              <button className="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-white bg-blue-300 border border-transparent leading-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Previous
+              </button>
+            )}
+            {data?.next ? (
+              <button
+                onClick={() => setPageIndex(pageIndex + 1)}
+                type="button"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Next
+              </button>
+            ) : (
+              <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-300 border border-transparent leading-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Next
+              </button>
+            )}
           </div>
         </div>
       </div>
