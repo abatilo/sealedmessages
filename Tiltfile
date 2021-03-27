@@ -19,6 +19,9 @@ helm_remote("postgresql",
 #   repo_name="bitnami",
 #   repo_url="https://charts.bitnami.com/bitnami",
 #   version="12.9.0",
+#   set=[
+#     "usePassword=false"
+#   ]
 # )
 
 # helm_remote("rabbitmq",
@@ -83,4 +86,5 @@ frontend_yaml = helm(
 k8s_yaml(frontend_yaml)
 
 k8s_resource("postgresql-postgresql", port_forwards=["5432"])
+# k8s_resource("redis-master", port_forwards=["6739"])
 k8s_resource("traefik", port_forwards=["8000", "9000"])
