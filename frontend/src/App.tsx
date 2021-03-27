@@ -82,7 +82,7 @@ const App = () => {
                 </thead>
                 <tbody>
                   {error ? (
-                    <tr className="even:bg-blue-100 odd:bg-blue-200">
+                    <tr className="even:bg-blue-100">
                       <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"></td>
                       <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"></td>
                       <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"></td>
@@ -151,6 +151,15 @@ const App = () => {
 
                         return (
                           <tr className="even:bg-blue-100 odd:bg-blue-200">
+                            {
+                              // <tr
+                              //   className={`${
+                              //     revealed
+                              //       ? "even:bg-blue-100 odd:bg-blue-200"
+                              //       : "even:bg-red-100 odd:bg-red-200"
+                              //   }`}
+                              // >
+                            }
                             <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                               {icon}
                             </td>
