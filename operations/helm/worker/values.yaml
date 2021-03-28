@@ -1,0 +1,12 @@
+replicaCount: 1
+
+image:
+  repository: worker
+  tag: ""
+
+env:
+  DB_HOST: postgresql
+  DB_PASSWORD: local_password
+  DJANGO_SECRET_KEY: local_secret_key
+  DJANGO_DEBUG: true
+  DJANGO_ALLOWED_HOSTS: []

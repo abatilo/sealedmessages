@@ -26,6 +26,11 @@ DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 # Allow for the pod to hit its own health checks
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").splitlines()
 
+# Celery settings
+
+CELERY_BROKER_URL = "amqp://user:admin@rabbitmq"
+CELERY_RESULT_BACKEND = "django-db"
+
 
 # Application definition
 
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
