@@ -117,6 +117,9 @@ k8s_resource("traefik", port_forwards=["8000", "9000"])
 #   "./operations/helm/worker/",
 #   name="worker",
 #   values=["./operations/helm/worker/values.yaml"],
+#   set=[
+#     "replicaCount=1",
+#   ],
 # )
 # k8s_yaml(worker_yaml)
 # k8s_resource("worker", resource_deps=["rabbitmq"])
