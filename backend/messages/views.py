@@ -1,10 +1,8 @@
-import logging
 from django.utils import timezone
 from rest_framework import viewsets
 
 from .models import Message
 from .serializers import CreateMessageSerializer, MessageSerializer
-from .tasks import add
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -12,8 +10,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
 
     def list(self, request, *args, **kwargs):
-        # r = add.delay(1, 2)
-        # logging.info(r.get())
         return super().list(self, request, *args, **kwargs)
 
     def get_serializer_class(self):

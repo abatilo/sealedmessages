@@ -47,7 +47,3 @@ up: bootstrap ## Run a local development environment
 .PHONY: psql
 psql: ## Opens a psql shell to the local postgres instance
 	kubectl --context kind-$(PROJECT_NAME) exec -it postgresql-postgresql-0 -- bash -c "PGPASSWORD=local_password psql -U postgres"
-
-.PHONY: redis-cli
-redis-cli: ## Opens a redis-cli shell
-	kubectl --context kind-$(PROJECT_NAME) exec -it redis-master-0 -c redis -- redis-cli
