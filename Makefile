@@ -42,7 +42,7 @@ clean: ## Delete local dev environment
 .PHONY: up
 up: bootstrap ## Run a local development environment
 	tilt up --context kind-$(PROJECT_NAME) --hud
-	tilt down --context kind-$(PROJECT_NAME)
+	# tilt down --context kind-$(PROJECT_NAME)
 
 .PHONY: psql
 psql: ## Opens a psql shell to the local postgres instance
