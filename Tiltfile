@@ -30,8 +30,8 @@ docker_build(
   context="./backend",
   dockerfile="./operations/Dockerfile.backend",
   live_update=[
-    fall_back_on(['./backend/pyproject.toml', './backend/poetry.lock']),
     sync('./backend/', '/app/'),
+    run('cd /app && poetry install', trigger=['./backend/pyproject.toml', './backend/poetry.lock']),
   ],
 
   # Override Dockerfile so that we stay on the build layer with dev
@@ -46,8 +46,8 @@ docker_build(
   context="./frontend",
   dockerfile="./operations/Dockerfile.frontend",
   live_update=[
-    fall_back_on(['./frontend/package.json', './frontend/yarn.lock']),
     sync('./frontend/', '/app/'),
+    run('cd /app && yarn install', trigger=['./frontend/package.json', './frontend/yarn.lock']),
   ],
 
   # Override Dockerfile so that we stay on the build layer with dev
