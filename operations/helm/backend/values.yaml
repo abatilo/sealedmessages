@@ -1,6 +1,7 @@
 replicaCount: 1
 
 image:
+  registry: localhost:32323
   repository: backend
   tag: ""
 
