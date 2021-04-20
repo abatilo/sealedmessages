@@ -1,5 +1,5 @@
 from django.utils import timezone
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets
 
 from .models import Message
 from .serializers import CreateMessageSerializer, MessageSerializer
@@ -8,6 +8,7 @@ from .serializers import CreateMessageSerializer, MessageSerializer
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         return super().list(self, request, *args, **kwargs)

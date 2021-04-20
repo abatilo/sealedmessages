@@ -36,6 +36,7 @@ CELERY_RESULT_BACKEND = "django-db"
 
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
+    "auth.apps.AuthConfig",
     "messages.apps.MessagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
