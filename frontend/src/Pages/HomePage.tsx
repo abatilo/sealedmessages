@@ -91,7 +91,7 @@ const listMessages = async (url: string) => {
 const HomePage = () => {
   const [revealedOnly, setRevealedOnly] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     `/api/v1/messages?page=${pageIndex}${revealedOnly ? "&revealed=1" : ""}`,
     listMessages
   );

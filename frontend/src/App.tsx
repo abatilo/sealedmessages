@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
-import useSWR from "swr";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const CreateMessagePage = lazy(() => import("./Pages/CreateMessage"));
+const LoginPage = lazy(() => import("./Pages/LoginPage"));
 const HomePage = lazy(() => import("./Pages/HomePage"));
 
 const App = () => {
@@ -12,6 +12,9 @@ const App = () => {
         <Switch>
           <Route path="/create">
             <CreateMessagePage />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
           </Route>
           <Route path="/">
             <HomePage />
