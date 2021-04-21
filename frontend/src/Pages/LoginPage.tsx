@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { BackendClient } from "../Client/Client";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -8,22 +9,17 @@ const LoginPage = () => {
 
   useEffect(() => {
     const getCSRF = async () => {
-      const resp = await fetch("/api/v1/csrf", {
+      const c = new BackendClient();
+      const { csrfToken } = await c.getCSRF();
+      setCSRFToken(csrfToken);
+
+      const sessionResponse = await fetch("/api/v1/session", {
         credentials: "same-origin",
       });
 
-      if (resp.ok) {
-        setCSRFToken(resp.headers.get("X-CSRFToken") || "");
-        console.log("Set token");
-
-        const sessionResponse = await fetch("/api/v1/session", {
-          credentials: "same-origin",
-        });
-
-        if (sessionResponse.ok) {
-          const { isAuthenticated } = await sessionResponse.json();
-          setIsAuthenticated(isAuthenticated);
-        }
+      if (sessionResponse.ok) {
+        const { isAuthenticated } = await sessionResponse.json();
+        setIsAuthenticated(isAuthenticated);
       }
     };
     getCSRF();
