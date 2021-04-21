@@ -44,10 +44,3 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          resources:
-            limits:
-              cpu: 2
-              memory: 2Gi
-            requests:
-              cpu: 2
-              memory: 2Gi
