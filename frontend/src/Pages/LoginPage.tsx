@@ -1,75 +1,30 @@
-import { useCallback, useEffect, useState } from "react";
-import { BackendClient } from "../Client/Client";
+import { useCallback, useState } from "react";
+import { useHistory } from "react-router";
+import { Redirect } from "react-router-dom";
+import { useClient } from "../Client/Provider";
 
 const LoginPage = () => {
+  const c = useClient();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [csrfToken, setCSRFToken] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useHistory();
 
-  useEffect(() => {
-    const getCSRF = async () => {
-      const c = new BackendClient();
-      const { csrfToken } = await c.getCSRF();
-      setCSRFToken(csrfToken);
-
-      const sessionResponse = await fetch("/api/v1/session", {
-        credentials: "same-origin",
-      });
-
-      if (sessionResponse.ok) {
-        const { isAuthenticated } = await sessionResponse.json();
-        setIsAuthenticated(isAuthenticated);
-      }
-    };
-    getCSRF();
-  }, []);
+  console.log(c.authenticated());
 
   const login = useCallback(
     (event) => {
       event.preventDefault();
-
-      const sendLogin = async () => {
-        const resp = await fetch("/api/v1/login", {
-          method: "POST",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify({ username, password }),
-        });
-
-        if (resp.ok) {
-          setIsAuthenticated(true);
-        }
-      };
-
-      sendLogin();
+      c.login(username, password);
+      history.push("/create");
     },
-    [username, password, csrfToken]
+    [c, username, password, history]
   );
-
-  const logout = useCallback(() => {
-    const sendLogout = async () => {
-      await fetch("/api/v1/logout", {
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-        },
-      });
-      setIsAuthenticated(false);
-    };
-
-    sendLogout();
-  }, [csrfToken]);
 
   return (
     <div>
       <h1>React Cookie Auth</h1>
       <br />
-      {!isAuthenticated ? (
+      {!c.authenticated() ? (
         <div>
           <h2>Login</h2>
           <form onSubmit={login}>
@@ -101,7 +56,7 @@ const LoginPage = () => {
           </form>
         </div>
       ) : (
-        <button onClick={logout}>Logout</button>
+        <Redirect to="/create" />
       )}
     </div>
   );
