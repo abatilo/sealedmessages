@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
-import { useHistory } from "react-router";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { useClient } from "../Client/Provider";
 
 const LoginPage = () => {
@@ -9,12 +8,13 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const history = useHistory();
 
-  console.log(c.authenticated());
+  const updateUsername = useCallback((e) => setUsername(e.target.value), []);
+  const updatePassword = useCallback((e) => setPassword(e.target.value), []);
 
   const login = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
-      c.login(username, password);
+      await c.login(username, password);
       history.push("/create");
     },
     [c, username, password, history]
@@ -36,7 +36,7 @@ const LoginPage = () => {
                 id="username"
                 name="username"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={updateUsername}
               />
             </div>
             <div className="form-group">
@@ -47,7 +47,7 @@ const LoginPage = () => {
                 id="password"
                 name="password"
                 value={password}
-                onChange={({ target: { value } }) => setPassword(value)}
+                onChange={updatePassword}
               />
             </div>
             <button type="submit" className="btn btn-primary">

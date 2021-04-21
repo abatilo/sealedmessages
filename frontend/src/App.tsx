@@ -15,9 +15,11 @@ const App = () => {
         <Suspense fallback={<></>}>
           <Switch>
             <Route path="/create">
-              <RequireAuthenticated>
-                <CreateMessagePage />
-              </RequireAuthenticated>
+              <WithSession>
+                <RequireAuthenticated>
+                  <CreateMessagePage />
+                </RequireAuthenticated>
+              </WithSession>
             </Route>
             <Route path="/login">
               <WithSession>

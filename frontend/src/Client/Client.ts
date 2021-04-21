@@ -7,7 +7,7 @@ export interface Client {
 
   getCSRF(): Promise<GetCSRFResponse>;
   getSession(): Promise<GetSessionResponse>;
-  login(username: string, password: string): void;
+  login(username: string, password: string): Promise<void>;
   logout(): void;
 }
 
@@ -29,7 +29,6 @@ export class BackendClient implements Client {
 
   setAuthenticated(authenticated: boolean): void {
     this.isAuthenticated = authenticated;
-    console.log(`client::isAuthenticated = ${this.isAuthenticated}`);
   }
 
   async getCSRF(): Promise<GetCSRFResponse> {
@@ -75,18 +74,28 @@ export class BackendClient implements Client {
       body: JSON.stringify({ username, password }),
     });
 
+    console.log("Before resp.ok: " + this.isAuthenticated);
     if (resp.ok) {
       this.isAuthenticated = true;
+      return Promise.resolve();
     }
+    console.log("After resp.ok: " + this.isAuthenticated);
+    return Promise.reject("Failed to login");
   }
+
   async logout(): Promise<void> {
-    await fetch("/api/v1/logout", {
+    const resp = await fetch("/api/v1/logout", {
       credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": this.token,
       },
     });
-    this.isAuthenticated = false;
+
+    if (resp.ok) {
+      this.isAuthenticated = false;
+      return Promise.resolve();
+    }
+    return Promise.reject("Failed to logout");
   }
 }

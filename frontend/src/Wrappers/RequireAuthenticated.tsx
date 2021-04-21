@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { Redirect } from "react-router";
 import { useClient } from "../Client/Provider";
 
@@ -7,6 +7,7 @@ type Props = {
 };
 export const RequireAuthenticated = ({ children }: Props) => {
   const c = useClient();
+  console.log("From RequireAuthenticated: " + c.authenticated());
   if (c.authenticated()) {
     return <>{children}</>;
   }
