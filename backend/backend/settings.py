@@ -65,6 +65,9 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
 }
 
+SESSION_COOKIE_AGE = 15 * 60
+SESSION_SAVE_EVERY_REQUEST = True
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

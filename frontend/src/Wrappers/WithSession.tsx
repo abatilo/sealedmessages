@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
+import useSWR from "swr";
 import { useClient } from "../Client/Provider";
 
 type Props = {
@@ -7,6 +8,15 @@ type Props = {
 export const WithSession = ({ children }: Props) => {
   const [sessionCreated, setSessionCreated] = useState(false);
   const c = useClient();
+
+  // Use SWR library to setup infinite session refreshing
+  useSWR(
+    "/api/v1/session",
+    async () => {
+      await c.getSession();
+    },
+    { refreshInterval: 30000 }
+  );
 
   useEffect(() => {
     const startSession = async () => {
