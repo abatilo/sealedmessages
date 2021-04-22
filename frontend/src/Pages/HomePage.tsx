@@ -7,42 +7,46 @@ import DescriptionCard from "../Components/DescriptionCard";
 const listMessages = async (url: string) => {
   const response = await fetch(url);
   const data = await response.json();
-  return data?.results?.map(
-    ({
-      id,
-      title,
-      content,
-      created_date,
-      revealed_date,
-      revealed,
-    }: {
-      id: any;
-      title: any;
-      content: any;
-      created_date: any;
-      revealed_date: any;
-      revealed: boolean;
-    }) => {
-      let icon = <EyeOffIcon className="w-8 h-8" />;
+  return {
+    previous: data?.previous,
+    next: data?.next,
+    children: data?.results?.map(
+      ({
+        id,
+        title,
+        content,
+        created_date,
+        revealed_date,
+        revealed,
+      }: {
+        id: any;
+        title: any;
+        content: any;
+        created_date: any;
+        revealed_date: any;
+        revealed: boolean;
+      }) => {
+        let icon = <EyeOffIcon className="w-8 h-8" />;
 
-      if (revealed) {
-        icon = <EyeIcon className="w-8 h-8" />;
+        if (revealed) {
+          icon = <EyeIcon className="w-8 h-8" />;
+        }
+
+        return (
+          <>
+            <DescriptionCard
+              id={id}
+              title={title}
+              content={content}
+              createdDate={created_date}
+              revealedDate={revealed_date}
+              revealed={revealed}
+            />
+          </>
+        );
       }
-
-      return (
-        <>
-          <DescriptionCard
-            id={id}
-            title={title}
-            content={content}
-            createdDate={created_date}
-            revealedDate={revealed_date}
-            revealed={revealed}
-          />
-        </>
-      );
-    }
-  );
+    ),
+  };
 };
 
 const HomePage = () => {
@@ -73,8 +77,10 @@ const HomePage = () => {
           <p className="text-gray-500">Only show revealed messages</p>
         </div>
       </div>
-      <Suspense fallback={<div>Loading messages</div>}>{data}</Suspense>
-      <div className="py-8">
+      <Suspense fallback={<div>Loading messages</div>}>
+        {data?.children}
+      </Suspense>
+      <div className="pt-2">
         {data?.previous ? (
           <button
             onClick={() => setPageIndex(pageIndex - 1)}
