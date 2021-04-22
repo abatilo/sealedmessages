@@ -8,7 +8,6 @@ from .serializers import CreateMessageSerializer, MessageSerializer
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         return super().list(self, request, *args, **kwargs)
