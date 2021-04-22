@@ -2,6 +2,7 @@ import { useState, Suspense } from "react";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 import useSWR from "swr";
 import ApplicationShell from "../Components/ApplicationShell";
+import DescriptionCard from "../Components/DescriptionCard";
 
 const listMessages = async (url: string) => {
   const response = await fetch(url);
@@ -29,26 +30,16 @@ const listMessages = async (url: string) => {
       }
 
       return (
-        <tr key={id} className="even:bg-blue-100 odd:bg-blue-200">
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {icon}
-          </td>
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {id}
-          </td>
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {title}
-          </td>
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {content}
-          </td>
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {created_date}
-          </td>
-          <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {revealed_date}
-          </td>
-        </tr>
+        <>
+          <DescriptionCard
+            id={id}
+            title={title}
+            content={content}
+            createdDate={created_date}
+            revealedDate={revealed_date}
+            revealed={revealed}
+          />
+        </>
       );
     }
   );
@@ -82,62 +73,18 @@ const HomePage = () => {
           <p className="text-gray-500">Only show revealed messages</p>
         </div>
       </div>
-      <div className="overflow-hidden border border-b border-blue-200 shadow-xl sm:rounded-lg">
-        <table className="min-w-full divide-y divide-blue-200">
-          <thead className="bg-blue-100">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-              ></th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-              >
-                ID
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-              >
-                Title
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-              >
-                Content
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-              >
-                Created
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-              >
-                Revealed
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <Suspense fallback={<div>Loading messages</div>}>{data}</Suspense>
-          </tbody>
-        </table>
-      </div>
+      <Suspense fallback={<div>Loading messages</div>}>{data}</Suspense>
       <div className="py-8">
         {data?.previous ? (
           <button
             onClick={() => setPageIndex(pageIndex - 1)}
             type="button"
-            className="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-white bg-blue-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-white bg-indigo-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Previous
           </button>
         ) : (
-          <button className="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-white bg-blue-300 border border-transparent leading-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button className="inline-flex items-center px-3 py-2 mr-2 text-sm font-medium text-white bg-indigo-300 border border-transparent leading-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Previous
           </button>
         )}
@@ -145,12 +92,12 @@ const HomePage = () => {
           <button
             onClick={() => setPageIndex(pageIndex + 1)}
             type="button"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Next
           </button>
         ) : (
-          <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-300 border border-transparent leading-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-300 border border-transparent leading-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Next
           </button>
         )}
