@@ -27,16 +27,14 @@ const listMessages = async (url: string) => {
         revealed: boolean;
       }) => {
         return (
-          <>
-            <DescriptionCard
-              id={id}
-              title={title}
-              content={content}
-              createdDate={created_date}
-              revealedDate={revealed_date}
-              revealed={revealed}
-            />
-          </>
+          <DescriptionCard
+            id={id}
+            title={title}
+            content={content}
+            createdDate={created_date}
+            revealedDate={revealed_date}
+            revealed={revealed}
+          />
         );
       }
     ),
