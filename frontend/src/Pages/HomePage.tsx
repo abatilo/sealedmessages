@@ -1,8 +1,8 @@
 import { useState, Suspense } from "react";
-import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 import useSWR from "swr";
 import ApplicationShell from "../Components/ApplicationShell";
 import DescriptionCard from "../Components/DescriptionCard";
+import { Link } from "react-router-dom";
 
 const listMessages = async (url: string) => {
   const response = await fetch(url);
@@ -72,7 +72,7 @@ const HomePage = () => {
       <Suspense fallback={<div>Loading messages</div>}>
         {data?.children}
       </Suspense>
-      <div className="pt-2">
+      <div className="pt-2 flex">
         {data?.previous ? (
           <button
             onClick={() => setPageIndex(pageIndex - 1)}
@@ -99,6 +99,13 @@ const HomePage = () => {
             Next
           </button>
         )}
+        <div className="flex-grow"></div>
+        <Link
+          to="/create"
+          className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent leading-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Seal your message
+        </Link>
       </div>
     </ApplicationShell>
   );
