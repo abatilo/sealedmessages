@@ -6,3 +6,7 @@ export type GetCSRFResponse = {
 export type GetSessionResponse = {
   isAuthenticated: boolean;
 };
+
+export type CreateMessageResponse = {
+  id: string;
+};

@@ -1,9 +1,11 @@
 import { useState, useCallback } from "react";
+import { useHistory } from "react-router";
 import { useClient } from "../Client/Provider";
 import ApplicationShell from "../Components/ApplicationShell";
 
 const CreateMessagePage = () => {
   const c = useClient();
+  const history = useHistory();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [revealedDate, setRevealedDate] = useState("");
@@ -18,9 +20,10 @@ const CreateMessagePage = () => {
   const submit = useCallback(
     async (event) => {
       event.preventDefault();
-      await c.submit(title, content, revealedDate);
+      const { id } = await c.submit(title, content, revealedDate);
+      history.push(`/${id}`);
     },
-    [c, title, content, revealedDate]
+    [c, history, title, content, revealedDate]
   );
 
   return (

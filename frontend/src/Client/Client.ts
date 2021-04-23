@@ -1,7 +1,15 @@
-import { GetCSRFResponse, GetSessionResponse } from "./Models";
+import {
+  CreateMessageResponse,
+  GetCSRFResponse,
+  GetSessionResponse,
+} from "./Models";
 
 export interface Client {
-  submit(title: string, content: string, revealedDate: string): Promise<void>;
+  submit(
+    title: string,
+    content: string,
+    revealedDate: string
+  ): Promise<CreateMessageResponse>;
 
   csrfToken(): string;
   authenticated(): boolean;
@@ -21,7 +29,7 @@ export class BackendClient implements Client {
     title: string,
     content: string,
     revealedDate: string
-  ): Promise<void> {
+  ): Promise<CreateMessageResponse> {
     const response = await fetch("/api/v1/messages", {
       method: "POST",
       credentials: "same-origin",
@@ -30,8 +38,9 @@ export class BackendClient implements Client {
       },
       body: JSON.stringify({ title, content, revealed_date: revealedDate }),
     });
+    const { id } = await response.json();
     if (response.ok) {
-      return Promise.resolve();
+      return { id };
     }
     return Promise.reject("Submit request failed");
   }
