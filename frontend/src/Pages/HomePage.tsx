@@ -26,12 +26,6 @@ const listMessages = async (url: string) => {
         revealed_date: any;
         revealed: boolean;
       }) => {
-        let icon = <EyeOffIcon className="w-8 h-8" />;
-
-        if (revealed) {
-          icon = <EyeIcon className="w-8 h-8" />;
-        }
-
         return (
           <>
             <DescriptionCard
