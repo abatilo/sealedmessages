@@ -21,7 +21,7 @@ env:
   DB_PASSWORD: local_password
   DJANGO_SECRET_KEY: local_secret_key
   DJANGO_DEBUG: true
-  DJANGO_ALLOWED_HOSTS: []
+  DJANGO_ALLOWED_HOSTS: ["abatilo.ngrok.io"]
 
 entryPoints:
   - web
