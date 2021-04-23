@@ -8,5 +8,5 @@ module.exports = {
     extend: {},
     backgroundColor: ["even", "odd", "hover"],
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

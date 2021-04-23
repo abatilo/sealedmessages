@@ -28,6 +28,7 @@ const listMessages = async (url: string) => {
       }) => {
         return (
           <DescriptionCard
+            key={id}
             id={id}
             title={title}
             content={content}
@@ -72,7 +73,7 @@ const HomePage = () => {
       <Suspense fallback={<div>Loading messages</div>}>
         {data?.children}
       </Suspense>
-      <div className="pt-2 flex">
+      <div className="flex pt-2">
         {data?.previous ? (
           <button
             onClick={() => setPageIndex(pageIndex - 1)}

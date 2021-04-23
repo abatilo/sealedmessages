@@ -1,6 +1,8 @@
 import { GetCSRFResponse, GetSessionResponse } from "./Models";
 
 export interface Client {
+  submit(title: string, content: string, revealedDate: string): Promise<void>;
+
   csrfToken(): string;
   authenticated(): boolean;
   setAuthenticated(authenticated: boolean): void;
@@ -14,6 +16,25 @@ export interface Client {
 export class BackendClient implements Client {
   public token: string = "";
   public isAuthenticated: boolean = false;
+
+  async submit(
+    title: string,
+    content: string,
+    revealedDate: string
+  ): Promise<void> {
+    const response = await fetch("/api/v1/messages", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, content, revealed_date: revealedDate }),
+    });
+    if (response.ok) {
+      return Promise.resolve();
+    }
+    return Promise.reject("Submit request failed");
+  }
 
   csrfToken(): string {
     return this.token;
