@@ -27,7 +27,6 @@ export const WithSession = ({ children }: Props) => {
     startSession();
   }, [c]);
 
-  console.log("From WithSession: " + sessionCreated);
   if (sessionCreated) {
     return <>{children}</>;
   }

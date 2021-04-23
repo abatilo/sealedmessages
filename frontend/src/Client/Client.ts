@@ -15,10 +15,6 @@ export class BackendClient implements Client {
   public token: string = "";
   public isAuthenticated: boolean = false;
 
-  public constructor() {
-    console.log("Creating new client");
-  }
-
   csrfToken(): string {
     return this.token;
   }
@@ -74,12 +70,10 @@ export class BackendClient implements Client {
       body: JSON.stringify({ username, password }),
     });
 
-    console.log("Before resp.ok: " + this.isAuthenticated);
     if (resp.ok) {
       this.isAuthenticated = true;
       return Promise.resolve();
     }
-    console.log("After resp.ok: " + this.isAuthenticated);
     return Promise.reject("Failed to login");
   }
 

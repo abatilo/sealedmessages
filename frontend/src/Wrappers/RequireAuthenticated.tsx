@@ -7,7 +7,6 @@ type Props = {
 };
 export const RequireAuthenticated = ({ children }: Props) => {
   const c = useClient();
-  console.log("From RequireAuthenticated: " + c.authenticated());
   if (c.authenticated()) {
     return <>{children}</>;
   }
