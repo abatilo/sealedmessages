@@ -123,7 +123,7 @@ jobs:
           DB_HOST: "localhost"
           DB_PASSWORD: "local_password"
         run: |
-          docker run -it \
+          docker run \
             --network host -e DB_HOST -e DB_PASSWORD \
             backend-ci ${{ matrix.command }}
 
@@ -165,7 +165,7 @@ jobs:
 
       - name: "Execute check"
         run: |
-          docker run -it \
+          docker run \
             frontend-ci ${{ matrix.command }}
 
   final-build:
