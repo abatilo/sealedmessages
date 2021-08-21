@@ -198,6 +198,6 @@ jobs:
             type=registry,ref=ghcr.io/abatilo/sealedmessages:buildcache
             type=registry,ref=ghcr.io/abatilo/sealedmessages:backend-buildcache
             type=registry,ref=ghcr.io/abatilo/sealedmessages:frontend-buildcache
-          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages:buildcache
+          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages:buildcache,mode=max
           labels: |
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
