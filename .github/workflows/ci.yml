@@ -4,6 +4,8 @@ on:
     branches:
       - "main"
   pull_request: {}
+  pull_request_target:
+    types: [labeled]
 
 permissions:
   packages: write
@@ -11,6 +13,7 @@ permissions:
 
 jobs:
   build-backend-ci:
+    if: contains(github.event.pull_request.labels.*.name, 'safe to test')
     name: "Build backend-ci"
     runs-on:
       ubuntu-20.04
@@ -39,6 +42,7 @@ jobs:
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
 
   build-frontend-ci:
+    if: contains(github.event.pull_request.labels.*.name, 'safe to test')
     name: "Build frontend-ci"
     runs-on:
       ubuntu-20.04
