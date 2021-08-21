@@ -166,6 +166,7 @@ jobs:
       - name: "Execute check"
         run: |
           docker run \
+            -e CI=1
             frontend-ci ${{ matrix.command }}
 
   final-build:
