@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "main"
+  pull_request: {}
 
 permissions:
   packages: write
@@ -170,6 +171,7 @@ jobs:
             frontend-ci ${{ matrix.command }}
 
   final-build:
+    if: github.event_name == 'push'
     needs: ["backend-ci", "frontend-ci"]
     name: "Build final container"
     runs-on:
