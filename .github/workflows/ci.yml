@@ -29,13 +29,11 @@ jobs:
 
       - uses: docker/build-push-action@v2
         with:
-          push: true
           target: build-backend
-          tags: ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
           context: .
           file: ./operations/Dockerfile
-          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache
-          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages:backend-buildcache
+          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages:backend-buildcache,mode=max
           labels: |
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
 
@@ -59,13 +57,11 @@ jobs:
 
       - uses: docker/build-push-action@v2
         with:
-          push: true
           target: build-frontend
-          tags: ghcr.io/abatilo/sealedmessages-frontend-ci:${{ github.sha }}
           context: .
           file: ./operations/Dockerfile
-          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-frontend-ci:buildcache
-          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages-frontend-ci:buildcache,mode=max
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages:frontend-buildcache
+          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages:frontend-buildcache,mode=max
           labels: |
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
 
@@ -113,13 +109,12 @@ jobs:
 
       - uses: docker/build-push-action@v2
         with:
-          push: false
           load: true
           target: build-backend
-          tags: ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
+          tags: backend-ci
           context: .
           file: ./operations/Dockerfile
-          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages:backend-buildcache
           labels: |
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
 
@@ -128,7 +123,9 @@ jobs:
           DB_HOST: "localhost"
           DB_PASSWORD: "local_password"
         run: |
-          docker run --network host -e DB_HOST -e DB_PASSWORD ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }} ${{ matrix.command }}
+          docker run -it \
+            --network host -e DB_HOST -e DB_PASSWORD \
+            backend-ci ${{ matrix.command }}
 
   frontend-ci:
     needs: ["build-frontend-ci"]
@@ -157,22 +154,22 @@ jobs:
 
       - uses: docker/build-push-action@v2
         with:
-          push: false
           load: true
           target: build-frontend
-          tags: ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
+          tags: frontend-ci
           context: .
           file: ./operations/Dockerfile
-          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-frontend-ci:buildcache
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages:frontend-buildcache
           labels: |
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
 
       - name: "Execute check"
         run: |
-          docker run ghcr.io/abatilo/sealedmessages-frontend-ci:${{ github.sha }} ${{ matrix.command }}
+          docker run -it \
+            frontend-ci ${{ matrix.command }}
 
   final-build:
-    needs: ["build-backend-ci", "build-frontend-ci"]
+    needs: ["backend-ci", "frontend-ci"]
     name: "Build final container"
     runs-on:
       ubuntu-20.04
@@ -198,8 +195,8 @@ jobs:
           file: ./operations/Dockerfile
           cache-from: |
             type=registry,ref=ghcr.io/abatilo/sealedmessages:buildcache
-            type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache
-            type=registry,ref=ghcr.io/abatilo/sealedmessages-frontend-ci:buildcache
+            type=registry,ref=ghcr.io/abatilo/sealedmessages:backend-buildcache
+            type=registry,ref=ghcr.io/abatilo/sealedmessages:frontend-buildcache
           cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages:buildcache
           labels: |
             org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
