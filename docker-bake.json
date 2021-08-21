@@ -1,0 +1,22 @@
+{
+  "target": {
+    "backend-ci": {
+      "context": ".",
+      "dockerfile": "./operations/Dockerfile",
+      "target": "build-backend",
+      "tags": ["ghcr.io/abatilo/sealedmessages-backend-ci:GITHUB_SHA"]
+    },
+    "frontend-ci": {
+      "context": ".",
+      "dockerfile": "./operations/Dockerfile",
+      "target": "build-frontend",
+      "tags": ["ghcr.io/abatilo/sealedmessages-frontend-ci:GITHUB_SHA"]
+    },
+    "combined": {
+      "context": ".",
+      "dockerfile": "./operations/Dockerfile",
+      "target": "combined",
+      "tags": ["ghcr.io/abatilo/sealedmessages:GITHUB_SHA"]
+    }
+  }
+}

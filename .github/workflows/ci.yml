@@ -3,10 +3,74 @@ on:
   push:
     branches:
       - "main"
-  pull_request:
+
+permissions:
+  packages: write
+  contents: read
 
 jobs:
-  setup:
+  build-backend-ci:
+    name: "Build backend-ci"
+    runs-on:
+      ubuntu-20.04
+    steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v2
+
+      - name: "Install docker buildx"
+        uses: docker/setup-buildx-action@v1
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v2
+        with:
+          push: true
+          target: build-backend
+          tags: ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
+          context: .
+          file: ./operations/Dockerfile
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache
+          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache,mode=max
+          labels: |
+            org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
+
+  build-frontend-ci:
+    name: "Build frontend-ci"
+    runs-on:
+      ubuntu-20.04
+    steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v2
+
+      - name: "Install docker buildx"
+        uses: docker/setup-buildx-action@v1
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v2
+        with:
+          push: true
+          target: build-frontend
+          tags: ghcr.io/abatilo/sealedmessages-frontend-ci:${{ github.sha }}
+          context: .
+          file: ./operations/Dockerfile
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-frontend-ci:buildcache
+          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages-frontend-ci:buildcache,mode=max
+          labels: |
+            org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
+
+  backend-ci:
+    needs: ["build-backend-ci"]
     strategy:
       fail-fast: false
       matrix:
@@ -16,7 +80,6 @@ jobs:
     name: "Run checks"
     runs-on:
       ubuntu-20.04
-      # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
@@ -41,38 +104,70 @@ jobs:
       - name: "Install docker buildx"
         uses: docker/setup-buildx-action@v1
 
-      - name: "Restore docker cache"
-        uses: actions/cache@v2
-        id: cache
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v1
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Build CI container"
-        run: |
-          docker buildx build \
-            --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --cache-to "type=local,dest=/tmp/.buildx-cache" \
-            --load \
-            --tag ci \
-            --file operations/Dockerfile.backend \
-            --target build \
-            backend
-            
-      - name: "Write secrets to disk"
-        env:
-          FILE_TO_MOUNT: ${{ secrets.FILE_TO_MOUNT }}
-        run: |
-          echo "${FILE_TO_MOUNT}" > ${HOME}/foo.txt
-          cat ${HOME}/foo.txt
+      - uses: docker/build-push-action@v2
+        with:
+          push: false
+          load: true
+          target: build-backend
+          tags: ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
+          context: .
+          file: ./operations/Dockerfile
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:buildcache
+          labels: |
+            org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
 
       - name: "Execute check"
         env:
           DB_HOST: "localhost"
           DB_PASSWORD: "local_password"
         run: |
-          docker run --mount "type=bind,src=${HOME}/foo.txt,dst=/root/foo.txt" \
-            --rm ubuntu:20.04 cat /root/foo.txt
-          docker run --network host -e DB_HOST -e DB_PASSWORD --rm ci ${{ matrix.command }}
+          docker run --network host -e DB_HOST -e DB_PASSWORD ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }} ${{ matrix.command }}
+
+  frontend-ci:
+    needs: ["build-frontend-ci"]
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - "yarn test"
+    name: "Run checks"
+    runs-on:
+      ubuntu-20.04
+
+    steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v2
+
+      - name: "Install docker buildx"
+        uses: docker/setup-buildx-action@v1
+
+      - name: "Login to GitHub Container Registry"
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v2
+        with:
+          push: false
+          load: true
+          target: build-backend
+          tags: ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
+          context: .
+          file: ./operations/Dockerfile
+          cache-from: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }}
+          cache-to: type=registry,ref=ghcr.io/abatilo/sealedmessages-backend-ci:${{ github.sha }},mode=max
+          labels: |
+            org.opencontainers.image.source=https://github.com/abatilo/sealedmessages
+
+      - name: "Execute check"
+        run: |
+          docker run ghcr.io/abatilo/sealedmessages-frontend-ci:${{ github.sha }} ${{ matrix.command }}
